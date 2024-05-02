@@ -390,13 +390,17 @@ try {
     console.log('Configuring deployment key(s)');
 
     child_process.execFileSync(sshAddCmd, ['-L']).toString().trim().split(/\r?\n/).forEach(function(key) {
+        console.log(`TESTING KEY PROCSS`);
+        console.log(`${key}`);
         const parts = key.match(/\b(github\.com[:])([_.a-z0-9-]+\/[_.a-z0-9-]+)/i);
+        console.log(`${parts}`);
+        console.log(`${matches[1]}=${matches[2]}`);
 
         if (!parts) {
             if (logPublicKey) {
               console.log(`Comment for (public) key '${key}' does not match GitHub URL pattern. Not treating it as a GitHub deploy key.`);
             }
-            // return;
+            return;
         }
 
         const sha256 = crypto.createHash('sha256').update(key).digest('hex');
